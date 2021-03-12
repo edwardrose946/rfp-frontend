@@ -3,8 +3,12 @@ import { PolyUtil } from 'node-geometry-library';
 import React from 'react';
 import { View } from 'react-native';
 import { styles } from '../styles/styles';
+import { useTheme } from 'react-native-paper';
 
 export const CustomMapView = ({ encodedRouteString, addresses }) => {
+
+    const { colors } = useTheme();
+
     return (
         <View style={styles.container}>
             {encodedRouteString !== '' ?
@@ -25,7 +29,10 @@ export const CustomMapView = ({ encodedRouteString, addresses }) => {
                                     latitude: Number(object.lat),
                                     longitude: Number(object.lng),
                                 };
-                            })}/>
+                            })}
+                            strokeColor={colors.primary}
+                            strokeWidth={1.5}
+                        />
                         {
                             addresses.map(address => {
                                 return (
@@ -37,7 +44,7 @@ export const CustomMapView = ({ encodedRouteString, addresses }) => {
                                             }
                                         }
                                         description={address.postcode}
-                                        key={`${address.LatLng.lat} ${address.LatLng.lng}`}
+                                        key={`${address.LatLng.lat} ${address.LatLng.lng} ${address.firstLine}`}
                                         title={address.firstLine}
                                     />);
                             })

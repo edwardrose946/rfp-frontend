@@ -1,4 +1,4 @@
-import { Image, KeyboardAvoidingView, Platform, View } from 'react-native';
+import { Alert, Image, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory } from 'react-router-native';
 import { AppBar } from './AppBar';
@@ -18,6 +18,7 @@ export const Main = () => {
         const history = useHistory();
         const { colors } = useTheme();
         const [loggedIn, setLoggedIn] = useState(false);
+        const [showLoadingScreen, setShowLoadingScreen] = useState(false);
         const [encodedRouteString, setEncodedRouteString] = useState('');
         const [addresses, setAddresses] = useState();
         const [getDirections, result] = useLazyQuery(SEARCH_FILTER_GET_DIRECTIONS);
@@ -25,11 +26,16 @@ export const Main = () => {
 
         useEffect(() => {
             if (result.called && !result.loading && result.data) {
+                setShowLoadingScreen(false);
                 const points = result.data.searchFilterGetDirections.EncodedPolyLine.points;
                 setEncodedRouteString(points);
                 const addresses = result.data.searchFilterGetDirections.addresses;
                 setAddresses(addresses);
                 history.push(`/route-map`);
+            }
+            if (result.error) {
+                setShowLoadingScreen(false);
+                Alert.alert('No results :(', result.error.message);
             }
         }, [result]);
 
@@ -46,6 +52,8 @@ export const Main = () => {
                                     <SearchFilterDirectionsForm
                                         colors={colors}
                                         getDirections={getDirections}
+                                        setShowLoadingScreen={setShowLoadingScreen}
+                                        showLoadingScreen={showLoadingScreen}
                                     />
                                     :
                                     <SignInForm

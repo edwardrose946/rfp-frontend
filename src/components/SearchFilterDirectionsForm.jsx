@@ -5,24 +5,29 @@ import FormikDropdownPicker from './FormikDropdownPicker';
 import FormikTextInput from './FormikTextInput';
 import React from 'react';
 import { styles } from '../styles/styles';
+import { Loader } from './Loader';
 
 
 const defaultValidationSchema = yup.object().shape({
     list: yup
         .string()
+        .typeError('Must be a string')
         .required('Property List is required'),
     number: yup
         .number()
+        .typeError('Must be a number / no spaces !')
         .integer('Number of results must be an integer')
         .min(10, 'Number of results must be between 10 - 100')
         .max(100, 'Number of results must be between 10 - 100')
         .required('Number of results is required'),
     postcode: yup
         .string()
+        .typeError('Must be a string')
         .required('Starting Postcode is required'),
     radius: yup
         .number()
-        .integer('Radius must be an integer')
+        .integer()
+        .typeError('Must be a whole number / no spaces !')
         .min(0, 'Radius must be between 0 - 100')
         .max(100, 'Radius must be between 0 - 100')
         .required('Radius is required'),
@@ -105,15 +110,16 @@ const SearchFilterDirectionsFormContainer = ({
             validationSchema={validationSchema}
         >
             {({ handleSubmit }) => <InputFields
-                    colors={colors}
-                    onSubmit={handleSubmit}
-                />}
+                colors={colors}
+                onSubmit={handleSubmit}
+            />}
         </Formik>
     );
 };
-export const SearchFilterDirectionsForm = ({ getDirections, colors }) => {
+export const SearchFilterDirectionsForm = ({ getDirections, colors, showLoadingScreen, setShowLoadingScreen }) => {
 
     const onSubmit = async (values) => {
+        setShowLoadingScreen(true);
         const { postcode, list, radius, number } = values;
         try {
             await getDirections({
@@ -137,12 +143,17 @@ export const SearchFilterDirectionsForm = ({ getDirections, colors }) => {
     };
 
     return (
-        <SearchFilterDirectionsFormContainer
-            colors={colors}
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-            validationSchema={defaultValidationSchema}
-        />
+        <View>
+            <Loader
+                loading={showLoadingScreen}
+            />
+            <SearchFilterDirectionsFormContainer
+                colors={colors}
+                initialValues={initialValues}
+                onSubmit={onSubmit}
+                validationSchema={defaultValidationSchema}
+            />
+        </View>
     );
 
 };

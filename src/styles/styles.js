@@ -2,6 +2,15 @@ import { Dimensions, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 
 export const styles = StyleSheet.create({
+    activityIndicatorWrapper: {
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF',
+        borderRadius: 10,
+        display: 'flex',
+        height: 200,
+        justifyContent: 'space-around',
+        width: 200,
+    },
     appBar: {
         position: 'absolute'
     },
@@ -29,9 +38,20 @@ export const styles = StyleSheet.create({
         resizeMode: 'center',
         width: 150
     },
+    lottie: {
+        height: 100,
+        width: 100
+    },
     map: {
         height: Dimensions.get('window').height,
         width: Dimensions.get('window').width
+    },
+    modalBackground: {
+        alignItems: 'center',
+        backgroundColor: '#00000040',
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-around'
     },
     separator: {
         margin: Constants.statusBarHeight
