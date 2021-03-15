@@ -1,4 +1,4 @@
-import { Alert, Image, View } from 'react-native';
+import { Alert, Image, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory } from 'react-router-native';
 import { AppBar } from './AppBar';
@@ -13,16 +13,29 @@ import { styles } from '../styles/styles';
 import { useLazyQuery } from '@apollo/client';
 import { useTheme } from 'react-native-paper';
 
+
 export const Main = () => {
 
+        //react router hooks
         const history = useHistory();
+
+        //react native paper theme
         const { colors } = useTheme();
+
+        //app state
         const [loggedIn, setLoggedIn] = useState(false);
         const [showLoadingScreen, setShowLoadingScreen] = useState(false);
         const [encodedRouteString, setEncodedRouteString] = useState('');
         const [addresses, setAddresses] = useState();
-        const [getDirections, result] = useLazyQuery(SEARCH_FILTER_GET_DIRECTIONS);
+        const [currentQueryParams, setCurrentQueryParams] = useState({
+            list: '',
+            number: '',
+            postcode: '',
+            radius: ''
+        });
 
+        //graphQL state
+        const [getDirections, result] = useLazyQuery(SEARCH_FILTER_GET_DIRECTIONS);
 
         useEffect(() => {
             if (result.called && !result.loading && result.data) {
@@ -35,7 +48,7 @@ export const Main = () => {
             }
             if (result.error) {
                 setShowLoadingScreen(false);
-                Alert.alert('No results :(', result.error.message);
+                Alert.alert('Something went wrong...', result.error.message);
             }
         }, [result]);
 
@@ -43,7 +56,7 @@ export const Main = () => {
             <View>
                 <StatusBar style="auto"/>
                 <View style={styles.separator}/>
-                <AppBar history={history} style={styles.appBar}/>
+                <AppBar history={history} setLoggedIn={setLoggedIn} style={styles.appBar}/>
                 <View style={styles.container}>
                     <Switch>
                         <Route exact path={'/'}>
@@ -51,7 +64,9 @@ export const Main = () => {
                                 loggedIn ?
                                     <SearchFilterDirectionsForm
                                         colors={colors}
+                                        currentQueryParams={currentQueryParams}
                                         getDirections={getDirections}
+                                        setCurrentQueryParams={setCurrentQueryParams}
                                         setShowLoadingScreen={setShowLoadingScreen}
                                         showLoadingScreen={showLoadingScreen}
                                     />
@@ -72,6 +87,7 @@ export const Main = () => {
                         <Route path={'/route-map'}>
                             <CustomMapView
                                 addresses={addresses}
+                                currentQueryParams={currentQueryParams}
                                 encodedRouteString={encodedRouteString}
                             />
                         </Route>

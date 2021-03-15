@@ -1,14 +1,13 @@
+import { Dimensions, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { PolyUtil } from 'node-geometry-library';
 import React from 'react';
-import { View } from 'react-native';
 import { styles } from '../styles/styles';
 import { useTheme } from 'react-native-paper';
 
-export const CustomMapView = ({ encodedRouteString, addresses }) => {
+export const CustomMapView = ({ encodedRouteString, addresses, currentQueryParams }) => {
 
     const { colors } = useTheme();
-
     return (
         <View style={styles.container}>
             {encodedRouteString !== '' ?
@@ -58,7 +57,26 @@ export const CustomMapView = ({ encodedRouteString, addresses }) => {
                             title={'Home'}
                         />
                     </MapView>
-
+                    <TouchableOpacity style={{
+                        backgroundColor: 'rgba(255,255,255,1)',
+                        elevation: 5,
+                        left: Dimensions.get('window').width * 0.05,
+                        padding: 10,
+                        position: 'absolute',
+                        shadowColor: '#000',
+                        shadowOffset: {
+                            height: 2,
+                            width: 0,
+                        },
+                        shadowOpacity: 0.25,
+                        shadowRadius: 3.84,
+                        top: Dimensions.get('window').height * 0.65,
+                    }}>
+                        <Text>Query Parameters: </Text>
+                        <Text style={{ color: colors.secondary }}>{currentQueryParams.postcode}</Text>
+                        <Text style={{ color: colors.secondary }}>{currentQueryParams.list}</Text>
+                        <Text style={{ color: colors.secondary }}>{currentQueryParams.radius} miles radius</Text>
+                    </TouchableOpacity>
                 </View>
                 :
                 null}

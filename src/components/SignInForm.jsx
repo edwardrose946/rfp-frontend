@@ -94,6 +94,7 @@ const SignInForm = ({ setLoggedIn, history, colors }) => {
                 username,
             });
         } catch (e) {
+            console.log(e.message);
             Alert.alert('Invalid login credentials', e.message, [
                 { cancelable: false }
             ]);
@@ -101,15 +102,15 @@ const SignInForm = ({ setLoggedIn, history, colors }) => {
     };
 
     return (
-        <View>
-            <SignInContainer
-                colors={colors}
-                history={history}
-                initialValues={initialValues}
-                onSubmit={onSubmit}
-                validationSchema={defaultValidationSchema}
-            />
-        </View>
+
+        <SignInContainer
+            colors={colors}
+            history={history}
+            initialValues={initialValues}
+            onSubmit={onSubmit}
+            validationSchema={defaultValidationSchema}
+        />
+
 
     );
 };

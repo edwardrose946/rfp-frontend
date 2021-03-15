@@ -10,7 +10,6 @@ export const Loader = ({ loading }) => {
     return (
         <Modal
             animationType={'none'}
-            onRequestClose={() => console.log('close modal')}
             transparent={true}
             visible={loading}
         >

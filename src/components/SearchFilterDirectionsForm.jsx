@@ -3,9 +3,9 @@ import { Button, View } from 'react-native';
 import { Formik } from 'formik';
 import FormikDropdownPicker from './FormikDropdownPicker';
 import FormikTextInput from './FormikTextInput';
+import { Loader } from './Loader';
 import React from 'react';
 import { styles } from '../styles/styles';
-import { Loader } from './Loader';
 
 
 const defaultValidationSchema = yup.object().shape({
@@ -76,13 +76,13 @@ const InputFields = ({ onSubmit, colors }) => {
 
             <FormikTextInput
                 name={'radius'}
-                placeholder={'search radius'}
+                placeholder={'search radius (miles)'}
                 style={styles.formikTextInput}
             />
 
             <FormikTextInput
                 name={'number'}
-                placeholder={'number of results to filter from'}
+                placeholder={'max number of results to filter from'}
                 style={styles.formikTextInput}
             />
 
@@ -116,9 +116,17 @@ const SearchFilterDirectionsFormContainer = ({
         </Formik>
     );
 };
-export const SearchFilterDirectionsForm = ({ getDirections, colors, showLoadingScreen, setShowLoadingScreen }) => {
+export const SearchFilterDirectionsForm = ({
+                                               getDirections,
+                                               colors,
+                                               currentQueryParams,
+                                               showLoadingScreen,
+                                               setShowLoadingScreen,
+                                               setCurrentQueryParams
+                                           }) => {
 
     const onSubmit = async (values) => {
+        // loading screen is set to false when the result comes back from the request in the useEffect hook in main
         setShowLoadingScreen(true);
         const { postcode, list, radius, number } = values;
         try {
@@ -130,7 +138,15 @@ export const SearchFilterDirectionsForm = ({ getDirections, colors, showLoadingS
                     results: number.toString()
                 }
             });
+            setCurrentQueryParams({
+                ...currentQueryParams,
+                list: list,
+                number: number,
+                postcode: postcode,
+                radius: radius
+            });
         } catch (e) {
+            //error is handled in the useEffect hook in main
             console.log('error getting directions', e);
         }
     };
