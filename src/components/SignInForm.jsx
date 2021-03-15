@@ -96,7 +96,6 @@ const SignInForm = ({ setLoggedIn, history, colors }) => {
         } catch (e) {
             console.log(e.message);
             Alert.alert('Invalid login credentials', e.message, [
-                { cancelable: false }
             ]);
         }
     };
