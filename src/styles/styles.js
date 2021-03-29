@@ -55,5 +55,20 @@ export const styles = StyleSheet.create({
     },
     separator: {
         margin: Constants.statusBarHeight
+    },
+    touchableOpacity: {
+        backgroundColor: 'rgba(255,255,255,1)',
+        elevation: 5,
+        left: Dimensions.get('window').width * 0.05,
+        padding: 10,
+        position: 'absolute',
+        shadowColor: '#000',
+        shadowOffset: {
+            height: 2,
+            width: 0,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        top: Dimensions.get('window').height * 0.65,
     }
 });
